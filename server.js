@@ -58,7 +58,7 @@ app.get('/scrape',function(req,res){
             // });
             results.title = $(this).text();
             results.link = $(this).find('a').attr('href');
-            results.summary = $(this).find('h2 span').text();
+            results.summary = $(this).find('span.ghost').text();
             results.dateCreated = $(this).text();
             console.log(results);
 
@@ -79,6 +79,7 @@ app.get('/all', function(req,res) {
     console.log('got all');
     db.Article
     .find({})
+    .limit(20)
     .sort({dateCreated:1})
     .then(function(dbArticle){
         res.json(dbArticle)
@@ -91,7 +92,10 @@ app.get('/all', function(req,res) {
 
 // RETRIEVING SPECFIC ARTILE BY ID & POPULATE NOTES
 app.get('/articles/:id', function(req,res){
-    db.Article.find({ _id:req.params.id}).populate('note').then(function(dbArticle){
+    db.Article.find(
+      { _id:req.params.id})
+      .populate('note')
+      .then(function(dbArticle){
         res.json(dbArticle);
     })
     .catch(function(err){
@@ -102,8 +106,10 @@ app.get('/articles/:id', function(req,res){
 // SAVING NOTES ASSOCIATED WITH AN ARTICLE
 
 app.post('/articles/:id', function(req,res){
-    db.Note.create(req.body).then(function(dbNote){
-        return db.Article.findOneAndUpdate({_id: req.params.id},
+    db.Note.create(req.body)
+    .then(function(dbNote){
+        return db.Article.find(
+            {_id: mongojs.ObjectId(req.params.id)},
             {note:dbNote._id},
             {new:true});
     })

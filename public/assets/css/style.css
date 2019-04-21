@@ -4,3 +4,9 @@ body{
 li.nav-item {
     color:black;
 }
+#savenote {
+    margin-right:350px;
+}
+#bodyinput {
+    width:100%;
+}
