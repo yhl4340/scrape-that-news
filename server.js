@@ -39,6 +39,11 @@ app.use(express.static('public'));
 mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser:true});
 
 // ROUTES
+
+app.get('/',function(req,res){
+    res.send('index.html')
+});
+
 app.get('/scrape',function(req,res){
     axios.get('https://www.nytimes.com/').then(function(response){
         var $ = cheerio.load(response.data);
@@ -54,6 +59,7 @@ app.get('/scrape',function(req,res){
             results.title = $(this).text();
             results.link = $(this).find('a').attr('href');
             results.summary = $(this).find('h2 span').text();
+            results.dateCreated = $(this).text();
             console.log(results);
 
             // creating a new article using the results obj from above
@@ -69,8 +75,12 @@ app.get('/scrape',function(req,res){
 });
 
 // all articles
-app.get('/all',function(req,res){
-    db.Article.find({}).then(function(dbArticle){
+app.get('/all', function(req,res) {
+    console.log('got all');
+    db.Article
+    .find({})
+    .sort({dateCreated:1})
+    .then(function(dbArticle){
         res.json(dbArticle)
     }).
     catch(function(err){
@@ -104,6 +114,37 @@ app.post('/articles/:id', function(req,res){
         res.json(err);
     })
 });
+
+// DEL FROM DB
+app.get("/delete/:id", function(req, res) {
+  db.Note.remove(
+    {
+      _id: mongojs.ObjectId(req.params.id)
+    },
+    function(err, removed) {
+      if (err) {
+        console.log("err", err);
+        res.send(err);
+      } else {
+        console.log(removed, ":removed");
+        res.send(removed);
+      }
+    }
+  );
+});
+
+app.get("/clearall", function(req, res) {
+  db.Note.remove({}, function(err, res) {
+    if (err) {
+      console.log("err from line 135", err);
+      res.send(err);
+    } else {
+      res.send(res);
+      console.log("res from line 143", res);
+    }
+  });
+});
+
 
 app.listen(PORT,function(){
     console.log('app running on port', PORT)
