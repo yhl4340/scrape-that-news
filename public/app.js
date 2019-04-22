@@ -15,7 +15,13 @@ function getResults(){
             'Panel" data-dismiss="alert"><span class="float-right"><i class="fa fa-remove"></i></span></button></div><p>Summary: ' + data[i].summary + '"<br/>'+ 'Link: http:'+ data[i].link + " </p><br/><p>Date Created:' " + data[i].dateCreated+ "'</div></div>'");
             // console.log(data[i]._id,'panel id')
 
-            var myBtn = $("<button data-id='"+ data[i]._id + "'class='btn-note btn btn-outline-primary btn-sm' data-toggle='modal' data-target='#scrape-modal' >Save Note</button>");
+            var myBtn = $(`
+            <button data-id='${data[i]._id} 'class='btn-note btn btn-outline-primary btn-sm' data-toggle='modal' data-target='#scrape-modal' >Note
+             </button>
+             <button data-id='${data[i]._id} 'class='btn-article btn btn-outline-primary btn-sm' data-toggle='modal' >Save article
+             </button>
+             <button data-id='${data[i]._id}'class='btn-delArt btn btn-outline-primary btn-sm' data-toggle='modal' >Delete Article
+             </button>`);
            
         myBtn.appendTo(myPanel);
         myPanel.appendTo(myCol);
@@ -33,28 +39,28 @@ function getResults(){
   });
 
 // modal for notes. when the button is clicked, ajax post to server. send data from form to server.Save a note
-// NOT WORKING
+
  $(document).on('click','.btn-note', function(){
      
      console.log('modal btn');
     //  $('#scrape-modal').show();
-     $('#notes').empty
+     $('.notes').empty
      var selected = $(this).attr('data-id')
      console.log('data-id',selected)
      $.ajax({
          type:"GET",
         //  dataType:'json',
-         url:'/articles/' + selected
-        //  data:{
-        //      title: $('#title').val().trim(),
-        //      note: $('#note').val().trim(),
-        //      created: Date.now()
-        //  }
+         url:'/articles/' + selected,
+         data:{
+           
+             note: $('.notes').val().trim(),
+             created: Date.now()
+         }
      })
      .then(function(data){
         console.log('data for notes',data);
         
-        $('.notes-title').append('<h5>' + data.title + '</h5>');
+        $('.notes-title').append('<h5>Notes for article ID:' + data[0]._id + '</h5>');
         // enter new title
         // $('#notes-title').append("<input id='titleinput; name= 'title >");
         
@@ -62,30 +68,55 @@ function getResults(){
         $('.notes').append('<textarea id = "bodyinput" name= "body"></textarea>');
         
         // A btn to submit a new note. w the id of the article saved to it
-        $(".notes").append("<button data-id='" + data._id + "' id='savenote' class='btn btn-primary btn-sm align-item-end' 'data-dismiss='modal'>Save Note</button>");
+        $(".notes").append("<button data-id='" + data[0]._id + "' id='savenote' class='btn btn-primary btn-sm align-item-end' 'data-dismiss='modal'>Save your Note</button>");
         
         if(data.note){   
-            $('#bodyinput').val(data.note.body);
+            console.log(data,'note ')
+            $('#bodyinput').html(data.note.body);
         }
      });
  });
 
-// WHEN CLICKING ON SAVENOTE BTN
+// WHEN CLICKING ON SAVENOTE BTN. returns undefined.
 $(document).on('click','#savenote',function(){
     var thisId = $(this).attr('data-id');
     $.ajax({
         type:'POST',
-        dataType:'json',
         url:'/articles/'+ thisId,
         data: {
             body:$('#bodyinput').val(),
-            // title:$ ('#titleinput').val(),
-            // created:Date.now()
+            created:Date.now()
         }
     })
     .then(function(data){
-        console.log('saving notes', data);
+        console.log('saving notes', data);  
+        $('#notes').append('<p>' + data.body + '</p>')
     });
     $('#bodyinput').val('');
-    $('#titleinput').val('');
+    // $('#titleinput').val('');
+});
+
+// del ARTICLE.kinda working
+$(document).on('click','.btn-delArt', function(){
+    $(this).parent().remove();
+    var thisId = $(this).attr('data-id')
+   
+    console.log('disalbed id', thisId);
+    $.ajax({
+        type:'GET',
+        url:'/delete/'+ thisId,
+        success: function(resposne){
+            thisId.remove();
+            $('.notes').val('');
+            $('.title').val('');
+            console.log('deleted',data)
+        }
+      
+    })
+    // .then(function(data){
+    //     console.log(data,'deleted')
+    //     $('#articles').filter(
+    //     '[data-id=" ' + thisId + "']").remove();
+    //     // location.reload();
+    // });
 });

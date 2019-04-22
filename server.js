@@ -16,17 +16,17 @@
 // * Feel free to add more content to your database (photos, bylines, and so on).
 
 // Users should also be able to leave comments on the articles displayed and revisit them later. The comments should be saved to the database as well and associated with their articles. Users should also be able to delete comments left on articles. All stored comments should be visible to every user.
-
+ var mongojs = require('mongojs');
 var express = require('express');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var axios = require('axios');
 var cheerio = require('cheerio');
+var path = require('path');
 
 // req all models
 var db = require('./models');
 var PORT = 8080;
-// init express
 var app = express();
 
 // mid ware
@@ -35,13 +35,26 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(express.static('public'));
 
-// MONGO DB
+// // Database configuration
+// var databaseUrl = "mongoHeadlines";
+// var collections = ["articles"];
+
+// // Hook mongojs config to db variable
+// var db = mongojs(databaseUrl, collections);
+// // MONGO DB
 mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser:true});
+
+var exphbs = require("express-handlebars");
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // ROUTES
 
 app.get('/',function(req,res){
-    res.send('index.html')
+  var hbsObj = {
+    articles:data
+  };
+    res.render('index',{articles:'articles'} )
 });
 
 app.get('/scrape',function(req,res){
@@ -50,15 +63,9 @@ app.get('/scrape',function(req,res){
         $('article.css-8atqhb').each(function(i,el){
             var results = 
             {};
-            // var title = $(el).text();
-            // var link = $(el).find('a').attr('href');
-            // results.push({
-            //     title:title,
-            //     link:link
-            // });
             results.title = $(this).text();
             results.link = $(this).find('a').attr('href');
-            results.summary = $(this).find('span.ghost').text();
+            results.summary = $(this).find('span.balancedHeadline').text();
             results.dateCreated = $(this).text();
             console.log(results);
 
@@ -79,7 +86,7 @@ app.get('/all', function(req,res) {
     console.log('got all');
     db.Article
     .find({})
-    .limit(20)
+    .limit(5)
     .sort({dateCreated:1})
     .then(function(dbArticle){
         res.json(dbArticle)
@@ -93,7 +100,9 @@ app.get('/all', function(req,res) {
 // RETRIEVING SPECFIC ARTILE BY ID & POPULATE NOTES
 app.get('/articles/:id', function(req,res){
     db.Article.find(
-      { _id:req.params.id})
+      {
+         _id:mongoose.Types.ObejectId(req.params.id)
+      })
       .populate('note')
       .then(function(dbArticle){
         res.json(dbArticle);
@@ -104,26 +113,42 @@ app.get('/articles/:id', function(req,res){
 })
 
 // SAVING NOTES ASSOCIATED WITH AN ARTICLE
-
-app.post('/articles/:id', function(req,res){
-    db.Note.create(req.body)
-    .then(function(dbNote){
-        return db.Article.find(
-            {_id: mongojs.ObjectId(req.params.id)},
-            {note:dbNote._id},
-            {new:true});
-    })
-    .then(function(dbArticle){
-        res.json(dbArticle)
-    })
-    .catch(function(err){
-        res.json(err);
-    })
+app.post('/articles/:id', function(req, res) {
+  console.log('reqBody:', req.body);
+  console.log('ArticledId:', req.params.id);
+  db.Note.create(req.body)
+    .then(function(dbNote) {
+      console.log('Note:', dbNote);
+      return db.Article.findOneAndUpdate(
+        { _id: req.params.id }, {$push:{note: dbNote._id }}, {new: true});
+  })
+  .then(function(dbArticle) {
+    res.json(dbArticle);
+  })
+  .catch(function(err) { res.json(err);
+  });
 });
+
+
+// app.post('/articles/:id', function(req,res){
+//     db.Note.create(req.body)
+//     .then(function(dbNote){
+//         return db.Article.find(
+//             {_id: mongojs.ObjectId(req.params.id)},
+//             {note:dbNote._id},
+//             {new:true});
+//     })
+//     .then(function(dbArticle){
+//         res.json(dbArticle)
+//     })
+//     .catch(function(err){
+//         res.json(err);
+//     })
+// });
 
 // DEL FROM DB
 app.get("/delete/:id", function(req, res) {
-  db.Note.remove(
+  db.Article.remove(
     {
       _id: mongojs.ObjectId(req.params.id)
     },

@@ -4,7 +4,7 @@
 <head>
 	{{!-- <meta charset="UTF-8">
 		<link rel="stylesheet" href="/assets/css/style.css" type="text/css" /> --}}
-	<title>!!</title>
+	<title>Eat da burger!</title>
 	{{!-- FONT AWESOME --}}
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
 		integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -15,10 +15,37 @@
 	{{!-- BOOTSTRAP --}}
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 	
-	<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/style.css" />
-
+	<link rel="stylesheet" type="text/css" media="screen" href="/assets/css/burger_style.css" />
+{{!-- <script src="../../public/assets/js/burgers.js"></script> --}}
 </head>
+
 <body>
-    {{{body}}}
+	<div class="container-fluid">
+		<div class="jumbotron">
+			<h1>Eat da Burger!!</h1>
+		</div>
+		<div class="row align-self-center">
+			{{!-- still confused about the file path --}}
+			<img src="/assets/img/th.jpg"></a>
+		</div>
+	
+		<form action='add' method="POST">
+			<div class=" form-group align-self-center">
+				<label for="burger">Add a burger</label>
+				<input type="text" class="form-control" style='width:20%' id="newinput">
+				<button id='addBurger' class='btn btn-primary' type='submit'>Add a burger!!!</button>
+			</div>
+		</form>
+
+</div>
+
+		<div>
+			{{{ body }}}
+		</div>
+
+
+	</div>
+	<script src="/assets/js/burgers.js"></script>
 </body>
+
 </html>

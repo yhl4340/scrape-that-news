@@ -10,3 +10,9 @@ li.nav-item {
 #bodyinput {
     width:100%;
 }
+button.btn-note, .btn-delArt, .btn-article {
+    width: 80px;
+    display: inline;
+    position: relative;
+    float: right;
+}
