@@ -82,26 +82,16 @@ app.get('/scrape',function(req,res){
 });
 
 // all articles
-app.get('/all', function(req,res) {
-    console.log('got all');
-    db.Article
-    .find({})
-    .limit(5)
-    .sort({dateCreated:1})
-    .then(function(dbArticle){
-        res.json(dbArticle)
-    }).
-    catch(function(err){
-        res.json(err)
-    });
-});
 
 
 // RETRIEVING SPECFIC ARTILE BY ID & POPULATE NOTES
 app.get('/articles/:id', function(req,res){
-    db.Article.find(
+  
+    // Yes, it's a valid ObjectId, proceed with `findById` call.
+  
+    db.Article.findOne(
       {
-         _id:mongoose.Types.ObejectId(req.params.id)
+         _id:mongojs.ObjectId(req.params.id)
       })
       .populate('note')
       .then(function(dbArticle){
@@ -110,10 +100,11 @@ app.get('/articles/:id', function(req,res){
     .catch(function(err){
         res.json(err)
     })
+
 })
 
 // SAVING NOTES ASSOCIATED WITH AN ARTICLE
-app.post('/articles/:id', function(req, res) {
+app.post('/notes/:id', function(req, res) {
   console.log('reqBody:', req.body);
   console.log('ArticledId:', req.params.id);
   db.Note.create(req.body)
@@ -164,17 +155,46 @@ app.get("/delete/:id", function(req, res) {
   );
 });
 
-app.get("/clearall", function(req, res) {
-  db.Note.remove({}, function(err, res) {
-    if (err) {
-      console.log("err from line 135", err);
-      res.send(err);
-    } else {
-      res.send(res);
-      console.log("res from line 143", res);
-    }
-  });
+app.get('/all', function(req,res) {
+    console.log('got all');
+    db.Article
+    .find({})
+    .limit(5)
+    .sort({dateCreated:1})
+    .then(function(dbArticle){
+        res.json(dbArticle)
+    }).
+    catch(function(err){
+        res.json(err)
+    });
 });
+
+app.put('/saved/:id',function(req,res){
+  db.Article.findByIdAndUpdate(
+    {_id:req.params.id},
+    {$set:{isSaved:true}}
+    )
+    .then(function(dbArticle){
+      console.log('saving',dbArticle)
+      res.json(dbArticle);
+    })
+    .catch(function(err){
+      res.json(err);
+    })
+});
+
+
+// app.get("/clearall", function(req, res) {
+//   db.Note.remove({}, function(err, res) {
+//     if (err) {
+//       console.log("err from line 135", err);
+//       res.send(err);
+//     } else {
+//       res.send(res);
+//       console.log("res from line 143", res);
+//     }
+//   });
+// });
 
 
 app.listen(PORT,function(){

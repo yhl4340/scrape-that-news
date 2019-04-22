@@ -20,6 +20,11 @@ var ArticleSchema = new Schema({
     dateCreated: {
         type: Date,
         default:Date.now
+    },
+    isSaved: {
+        type:Boolean,
+        default:false
+
     }
 });
 

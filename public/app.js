@@ -51,8 +51,7 @@ function getResults(){
          type:"GET",
         //  dataType:'json',
          url:'/articles/' + selected,
-         data:{
-           
+         data:{ 
              note: $('.notes').val().trim(),
              created: Date.now()
          }
@@ -82,7 +81,7 @@ $(document).on('click','#savenote',function(){
     var thisId = $(this).attr('data-id');
     $.ajax({
         type:'POST',
-        url:'/articles/'+ thisId,
+        url:'/notes/'+ thisId,
         data: {
             body:$('#bodyinput').val(),
             created:Date.now()
@@ -113,10 +112,19 @@ $(document).on('click','.btn-delArt', function(){
         }
       
     })
-    // .then(function(data){
-    //     console.log(data,'deleted')
-    //     $('#articles').filter(
-    //     '[data-id=" ' + thisId + "']").remove();
-    //     // location.reload();
-    // });
 });
+
+// save article
+$(document).on('click','.btn-article',function(){
+    $(this).addClass('disabled');
+    var thisId= $(this).attr('data-id');
+    console.log('id for saving article', thisId);
+    $.ajax({
+        type:"PUT",
+        url:'/saved/'+ thisId,
+    })
+    .then(function(data){
+        console.log('saved?', data);
+        $('#saved-articles').append(data.title)
+    })
+})
