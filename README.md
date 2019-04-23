@@ -4,7 +4,7 @@ Create an app that accomplishes the following:
 
     Whenever a user visits your site, the app should scrape stories from 
     
-    *a news outlet of your choice and display them for the user. Each 
+    a news outlet of your choice and display them for the user. Each 
      
      scraped article should be saved to your application database. At a 
      
@@ -25,5 +25,5 @@ Create an app that accomplishes the following:
 * - [x]  app to contain 'Summary - a short summary of the article'
 
 * - [x] app to contain 'URL'
-* - [] using all 5 npm packages
+* - [ ] using all 5 npm packages
 * - [x] link to heroku https://aqueous-bayou-85176.herokuapp.com/
