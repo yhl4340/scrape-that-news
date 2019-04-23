@@ -1,18 +1,21 @@
-body{
-    background: green;
-}
-li.nav-item {
-    color:black;
+/* 
+ */
+.navbar{
+    background:grey;
 }
 #savenote {
     margin-right:350px;
 }
-#bodyinput {
+/* #bodyinput {
     width:100%;
-}
+} */
 button.btn-note, .btn-delArt, .btn-article {
-    width: 80px;
-    display: inline;
+    width: 130px;
     position: relative;
     float: right;
+    margin:0 auto;
+
+}
+#submit{
+    color:white;
 }

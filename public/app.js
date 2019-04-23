@@ -49,7 +49,7 @@ function getResults(){
      console.log('data-id',selected)
      $.ajax({
          type:"GET",
-        //  dataType:'json',
+         dataType:'json',
          url:'/articles/' + selected,
          data:{ 
              note: $('.notes').val().trim(),
@@ -59,15 +59,13 @@ function getResults(){
      .then(function(data){
         console.log('data for notes',data);
         
-        $('.notes-title').append('<h5>Notes for article ID:' + data[0]._id + '</h5>');
-        // enter new title
-        // $('#notes-title').append("<input id='titleinput; name= 'title >");
+        $('.notes-title').append('<h5>Notes for article ID:' + data.value._id + '</h5>');
         
     // text area for text body
         $('.notes').append('<textarea id = "bodyinput" name= "body"></textarea>');
         
         // A btn to submit a new note. w the id of the article saved to it
-        $(".notes").append("<button data-id='" + data[0]._id + "' id='savenote' class='btn btn-primary btn-sm align-item-end' 'data-dismiss='modal'>Save your Note</button>");
+        $(".notes").append("<button data-id='" + data.value._id + "' id='savenote' class='btn btn-primary btn-sm align-item-end' 'data-dismiss='modal'>Save your Note</button>");
         
         if(data.note){   
             console.log(data,'note ')

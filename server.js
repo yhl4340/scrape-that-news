@@ -42,6 +42,16 @@ app.use(express.static('public'));
 // // Hook mongojs config to db variable
 // var db = mongojs(databaseUrl, collections);
 // // MONGO DB
+// var db = process.env.MONGODB_URI || 'mongodb://localhost/mongoHeadlines';
+// mongoose.connect(db,function(error){
+//   if(error){
+//     console.log(error);
+//   }
+//   else {
+//     console.log('mongoose connection is a go');
+//   }
+// })
+
 mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser:true});
 
 var exphbs = require("express-handlebars");
@@ -89,9 +99,9 @@ app.get('/articles/:id', function(req,res){
   
     // Yes, it's a valid ObjectId, proceed with `findById` call.
   
-    db.Article.findOne(
+    db.Article.findById(
       {
-         _id:mongojs.ObjectId(req.params.id)
+         _id:req.params.id
       })
       .populate('note')
       .then(function(dbArticle){
