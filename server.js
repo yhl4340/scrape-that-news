@@ -35,24 +35,20 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(express.static('public'));
 
-// // Database configuration
-// var databaseUrl = "mongoHeadlines";
-// var collections = ["articles"];
+// Database configuration
+var databaseUrl = 'mongodb://localhost/mongoHeadlines';
 
-// // Hook mongojs config to db variable
-// var db = mongojs(databaseUrl, collections);
-// // MONGO DB
-// var db = process.env.MONGODB_URI || 'mongodb://localhost/mongoHeadlines';
-// mongoose.connect(db,function(error){
-//   if(error){
-//     console.log(error);
-//   }
-//   else {
-//     console.log('mongoose connection is a go');
-//   }
-// })
+  if(process.env.MONGODB_URI){
+    mongoose.connect(process.env.MONGODDB_URI);
+  }
+  else {
+    mongoose.connect(databaseUrl);
+    console.log('mongoose connection is a go');
+  }
+  
+var db = mongoose.connection;
 
-mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser:true});
+// mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser:true});
 
 var exphbs = require("express-handlebars");
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));

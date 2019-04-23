@@ -123,7 +123,7 @@ $(document).on('click','.btn-article',function(){
     })
     .then(function(data){
         console.log('saved?', data);
-    //   window.location.href = "saved.html";
+      window.location.href = "saved.html";
       $('#saved-articles').append(data.title)
         
     })
