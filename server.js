@@ -39,14 +39,15 @@ app.use(express.static('public'));
 var databaseUrl = 'mongodb://localhost/mongoHeadlines';
 
   if(process.env.MONGODB_URI){
-    mongoose.connect(process.env.MONGODDB_URI);
+    mongoose.connect(process.env.MONGODB_URI);
+    console.log('process.env')
   }
   else {
     mongoose.connect(databaseUrl);
     console.log('mongoose connection is a go');
   }
-  
-var db = mongoose.connection;
+
+// var db = mongoose.connection;
 
 // mongoose.connect("mongodb://localhost/mongoHeadlines", { useNewUrlParser:true});
 
