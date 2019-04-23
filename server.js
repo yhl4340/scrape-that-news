@@ -186,14 +186,19 @@ app.put('/saved/:id',function(req,res){
     )
     .then(function(dbArticle){
       console.log('saving',dbArticle)
-      res.json(dbArticle);
+      res.json(dbArticle)
+      // res.redirect('saved', {articles:dbArticle});
     })
     .catch(function(err){
       res.json(err);
     })
 });
 
-
+app.get('/saved/:id', function(req,res){
+  db.Article.find({_id:req.params.id}).then(function(data){
+    res.json(data)
+  })
+})
 // app.get("/clearall", function(req, res) {
 //   db.Note.remove({}, function(err, res) {
 //     if (err) {

@@ -6,9 +6,9 @@
 #savenote {
     margin-right:350px;
 }
-/* #bodyinput {
+#bodyinput {
     width:100%;
-} */
+}
 button.btn-note, .btn-delArt, .btn-article {
     width: 130px;
     position: relative;

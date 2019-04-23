@@ -123,6 +123,8 @@ $(document).on('click','.btn-article',function(){
     })
     .then(function(data){
         console.log('saved?', data);
-        $('#saved-articles').append(data.title)
+    //   window.location.href = "saved.html";
+      $('#saved-articles').append(data.title)
+        
     })
 })
