@@ -36,7 +36,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Database configuration
-var databaseUrl = 'mongodb://localhost/mongoHeadlines';
+var databaseUrl = 'mongodb:localhost/mongoHeadlines';
 
   if(process.env.MONGODB_URI){
     mongoose.connect(process.env.MONGODB_URI);
