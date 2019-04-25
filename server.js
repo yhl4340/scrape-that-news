@@ -26,7 +26,7 @@ var path = require('path');
 
 // req all models
 var db = require('./models');
-var PORT = 8080;
+var PORT = process.env.PORT || 8080;
 var app = express();
 
 // mid ware
