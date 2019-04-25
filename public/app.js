@@ -112,6 +112,14 @@ $(document).on('click','.btn-delArt', function(){
     })
 });
 
+function createItem(){
+    sessionStorage.toSave = '';
+};
+
+function savingArt (){
+
+}
+
 // save article
 $(document).on('click','.btn-article',function(){
     $(this).addClass('disabled');
@@ -123,8 +131,12 @@ $(document).on('click','.btn-article',function(){
     })
     .then(function(data){
         console.log('saved?', data);
-      window.location.href = "saved.html";
-      $('#saved-articles').append(data.title)
+        var newData = JSON.stringify(data.title);
+        console.log('anything back?', newData)
+         sessionStorage.setItem(newData);
+        $('#saved-articles').html()= sessionStorage.getItem(newData)
+        window.location.href = "saved.html";
+      
         
     })
 })
