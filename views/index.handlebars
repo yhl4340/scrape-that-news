@@ -1,33 +1,20 @@
- <div class="jumbotron">
-            <h1>Scraper!!<br/><small>Scrape that news!!</small></h1>
-        </div>
-        <div id="articles">
-            {{articles}}
-        </div>
-        <div id="notes"></div>
-
-        <!-- MODAL -->
-        <div id='scrape-modal'class="modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                    <p class='notes-title'>title</p>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <div class='notes'> 
-
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <!-- <button id='save-notes' class="btn btn-primary">Save changes</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                </div>
-              </div>
-            </div>
-          </div>
-
+<h1>Mongo Scraper</h1>
+  {{#each articles}}
+ 
+    <div class="card w-100" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Title:{{this.title}}</h5>
+    
+          <p class="card-text">Summary:{{this.summary}}</p>
+          <p class="card-text">Link:{{this.link}}</p>
+          <p class="card-text">Date:{{this.dateCreated}}</p>
+            <button class='btn btn-primary' data-id='{{this._id}}'>Save</button>
+            <button class='btn btn-primary' data-id='{{this._id}}'>Delete</button>
+            <button class='btn btn-primary' data-id='{{this._id}}'data-toggle='modal' data-target='#scrape-modal' >Note</button>
+      </div>
     </div>
+</div>
+
+    <div id="notes"></div>
   
+{{/each}}

@@ -1,41 +1,43 @@
 
 
 // GRAB ALL ARTICLES 
-function getResults(){
-    // $('#articles').empty();
-    $.getJSON('/all', function (data){
-        console.log('am i getting anything?',data)
-        for(var i = 0; i < data.length; i ++){
-        var myCol = $('<div class="col py-4"></div>');
-        var myPanel = $(
-            '<div class="card card-outline-info"><div class="card-block"><div class="card-title"><p>Title:"' +
-            data[i].title+
-            '" </p><br/><p data-id=' + data[i]._id + " ' ></p><button type=\"button\" class=\"close\" data-target=\"#" +
-            i +
-            'Panel" data-dismiss="alert"><span class="float-right"><i class="fa fa-remove"></i></span></button></div><p>Summary: ' + data[i].summary + '"<br/>'+ 'Link: http:'+ data[i].link + " </p><br/><p>Date Created:' " + data[i].dateCreated+ "'</div></div>'");
-            // console.log(data[i]._id,'panel id')
+// function getResults(){
+//     // $('#articles').empty();
+//     $.getJSON('/all', function (data){
+//         console.log('am i getting anything?',data)
+    //     for(var i = 0; i < data.length; i ++){
+    //     var myCol = $('<div class="col py-4"></div>');
+    //     var myPanel = $(
+    //         '<div class="card card-outline-info"><div class="card-block"><div class="card-title"><p>Title:"' +
+    //         data[i].title+
+    //         '" </p><br/><p data-id=' + data[i]._id + " ' ></p><button type=\"button\" class=\"close\" data-target=\"#" +
+    //         i +
+    //         'Panel" data-dismiss="alert"><span class="float-right"><i class="fa fa-remove"></i></span></button></div><p>Summary: ' + data[i].summary + '"<br/>'+ 'Link: http:'+ data[i].link + " </p><br/><p>Date Created:' " + data[i].dateCreated+ "'</div></div>'");
+    //         // console.log(data[i]._id,'panel id')
 
-            var myBtn = $(`
-            <button data-id='${data[i]._id} 'class='btn-note btn btn-outline-primary btn-sm' data-toggle='modal' data-target='#scrape-modal' >Note
-             </button>
-             <button data-id='${data[i]._id} 'class='btn-article btn btn-outline-primary btn-sm' data-toggle='modal' >Save article
-             </button>
-             <button data-id='${data[i]._id}'class='btn-delArt btn btn-outline-primary btn-sm' data-toggle='modal' >Delete Article
-             </button>`);
+    //         var myBtn = $(`
+    //         <button data-id='${data[i]._id} 'class='btn-note btn btn-outline-primary btn-sm' data-toggle='modal' data-target='#scrape-modal' >Note
+    //          </button>
+    //          <button data-id='${data[i]._id} 'class='btn-article btn btn-outline-primary btn-sm' data-toggle='modal' >Save article
+    //          </button>
+    //          <button data-id='${data[i]._id}'class='btn-delArt btn btn-outline-primary btn-sm' data-toggle='modal' >Delete Article
+    //          </button>`);
            
-        myBtn.appendTo(myPanel);
-        myPanel.appendTo(myCol);
-        myCol.appendTo("#articles");
-    };
-    });
-};
+    //     myBtn.appendTo(myPanel);
+    //     myPanel.appendTo(myCol);
+    //     myCol.appendTo("#articles");
+    // };
+//     });
+// };
 
 // display all scraped articles to browser.working
  $('#submit').on('click',function(e){
      e.preventDefault();
-     $('#scrape-modal').hide();
      console.log('clicked');
-     getResults();
+     $.getJSON('/all', function(data){
+         console.log('getting back?',data)
+     })
+     
   });
 
 // modal for notes. when the button is clicked, ajax post to server. send data from form to server.Save a note
@@ -112,13 +114,13 @@ $(document).on('click','.btn-delArt', function(){
     })
 });
 
-function createItem(){
-    sessionStorage.toSave = '';
-};
+// function createItem(){
+//     sessionStorage.toSave = '';
+// };
 
-function savingArt (){
+// function savingArt (){
 
-}
+// }
 
 // save article
 $(document).on('click','.btn-article',function(){
@@ -133,9 +135,9 @@ $(document).on('click','.btn-article',function(){
         console.log('saved?', data);
         var newData = JSON.stringify(data.title);
         console.log('anything back?', newData)
-         sessionStorage.setItem(newData);
-        $('#saved-articles').html()= sessionStorage.getItem(newData)
-        window.location.href = "saved.html";
+        //  sessionStorage.setItem(newData);
+        // $('#saved-articles').html()= sessionStorage.getItem(newData)
+        // window.location.href = "saved.html";
       
         
     })
