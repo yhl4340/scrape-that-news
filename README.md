@@ -25,5 +25,6 @@ Create an app that accomplishes the following:
 * - [x]  app to contain 'Summary - a short summary of the article'
 
 * - [x] app to contain 'URL'
-* - [ ] using all 5 npm packages
+* - [ ] using all 5 npm packages.
+    * added handlebars
 * - [x] link to heroku https://aqueous-bayou-85176.herokuapp.com/
