@@ -1,11 +1,12 @@
-<h1>Mongo Scraper</h1>
+
   {{#each articles}}
- 
-    <div class="card w-100" style="width: 18rem;">
+ <div class="articles">
+    <div class="card w-100 mb-3" style="width: 18rem;">
       <div class="card-body">
-        <h5 class="card-title">Title:{{this.title}}</h5>
+        <h5 class="card-title">Title:<br/>{{this.title}}</h5>
     
-          <p class="card-text">Summary:{{this.summary}}</p>
+          <p class="card-text">Summary:<br/>
+          {{this.summary}}</p>
           <p class="card-text">Link:{{this.link}}</p>
           <p class="card-text">Date:{{this.dateCreated}}</p>
             <button class='btn btn-primary' data-id='{{this._id}}'>Save</button>
@@ -15,6 +16,9 @@
     </div>
 </div>
 
+
     <div id="notes"></div>
   
 {{/each}}
+
+<script src="/app.js"></script>

@@ -40,7 +40,7 @@ app.set("view engine", "handlebars");
 
 app.get('/',function(req,res){
     Db.Article.find({}).then( function(dbArticle){
-     res.render('index',{articles: dbArticle} ) 
+     res.render('index' ) 
     
     })    
 });
@@ -60,25 +60,40 @@ app.get('/scrape',function(req,res){
             {};
             results.title = $(this).text();
             results.link = $(this).find('a').attr('href');
-            results.summary = $(this).find('span.balancedHeadline').text();
-            results.dateCreated = $(this).text();
+            results.summary = $(this).find('p').text();
+            // used the attr of 'aria-lable' to get the time
+            results.dateCreated = $(this).find('time')
+             .attr('aria-label');
             console.log(results);
 
             // creating a new article using the results obj from above
             Db.Article.create(results).then(function(dbArticle){
-                // console.log(dbArticle);
+               console.log(dbArticle,"!!");
+           
             })
             .catch(function(err){
                 console.log(err);
             });
         });
-        // res.render('index', 
-        // {articles:results.title}
-        
+      res.send('Done!');
     });
 });
 
-// all articles
+app.get('/all', function(req,res) {
+  console.log('got all');
+  Db.Article
+  .find({})
+  .limit(5)
+  .sort({dateCreated:1})
+  .then(function(dbArticle){
+    console.log('db:', dbArticle);
+      res.render('index', {articles:dbArticle})
+  }).
+  catch(function(err){
+      res.json(err)
+  });
+});
+
 
 
 // RETRIEVING SPECFIC ARTILE BY ID & POPULATE NOTES
@@ -92,7 +107,7 @@ app.get('/articles/:id', function(req,res){
       })
       .populate('note')
       .then(function(dbArticle){
-        res.json(dbArticle);
+        res.render('articles',dbArticle);
     })
     .catch(function(err){
         res.json(err)
@@ -144,7 +159,7 @@ app.get('/all', function(req,res) {
     .limit(5)
     .sort({dateCreated:1})
     .then(function(dbArticle){
-        res.render({articles:dbArticle})
+        res.render( {articles:dbArticle})
     }).
     catch(function(err){
         res.json(err)

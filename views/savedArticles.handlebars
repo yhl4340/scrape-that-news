@@ -1,6 +1,6 @@
 {{#each articles}}
 {{#if this.isSaved}}
-<h3>{{this.title}}</h3>
+{{!-- <h3>{{this.title}}</h3>
 </div>
 <div class="articles">
   <p>{{this.summary}}</p>
@@ -8,7 +8,21 @@
 <div id="notes"></div>
 
 <div id="notes"></div>
+</div> --}}
+ 
+    <div class="card w-100 mb-3" style="width: 18rem;">
+      <div class="card-body">
+        <h5 class="card-title">Title:<br/>{{this.title}}</h5>
+    
+          <p class="card-text">Summary:<br/>{{this.summary}}</p>
+          <p class="card-text">Link:{{this.link}}</p>
+          <p class="card-text">Date:{{this.dateCreated}}</p>
+            <button class='btn btn-primary' data-id='{{this._id}}'>Save</button>
+            <button class='btn btn-primary' data-id='{{this._id}}'>Delete</button>
+            <button class='btn btn-primary' data-id='{{this._id}}'data-toggle='modal' data-target='#scrape-modal' >Note</button>
+      </div>
+    </div>
 </div>
-
+  
 {{/if}}
 {{/each}}
